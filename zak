@@ -1,0 +1,47 @@
+import vk_api
+from vk_api.longpoll import VkLongPoll, VkEventType
+def write_msg(user_id, message):
+    vk.method('messages.send', {'user_id': user_id, 'message': message , 'random_id': 0})
+
+predmeti = {1: 'astronomy', 2:'english',3:'bio',4:'vsemirka',5:'geography',6:'estestvo',7:'inf',8:'history',9:'iskustvo',10:'culture',11:'lit',12:'algebra',13:'geom',14:'mus',15:'math',16:'obzh',17:'obschestvo',18:'okrmir',19:'rus',20:'techno',21:'fizika',22:'himiya',23:'cherchenie',24:'ecology',25:'economy'}
+classy = 5
+predmet = 5
+
+# API-ключ созданный ранее
+token = "87792e9dd7f24115c6425e19c241eac1fcb3f7f78f440a156941789f6a5367232eb18fbc4244e694de8b5"
+
+# Авторизуемся как сообщество
+vk = vk_api.VkApi(token=token)
+
+# Работа с сообщениями
+longpoll = VkLongPoll(vk)
+# Основной цикл
+for event in longpoll.listen():
+
+    # Если пришло новое сообщение
+    if event.type == VkEventType.MESSAGE_NEW:
+        request = event.text.lower()
+        # Если оно имеет метку для меня( то есть бота)
+        if event.from_user and not (event.from_me):
+        
+            # Сообщение от пользователя
+            
+            
+            # Каменная логика ответа
+            if request == "учебник":
+                write_msg(event.user_id, "Выбрите предмет")
+                if event.type == VkEventType.MESSAGE_NEW:
+                    request = event.text.lower()
+                    # Если оно имеет метку для меня( то есть бота)
+                    if event.from_user and not (event.from_me):
+                        if request:
+                            predmet = request
+                            write_msg(event.user_id, "Выбрите класс")
+                            if event.type == VkEventType.MESSAGE_NEW:
+                                 request = event.text.lower()
+                                 # Если оно имеет метку для меня( то есть бота)
+                                 if event.from_user and not (event.from_me):
+                                     if request:
+                                         classy = request
+                                         write_msg(event.user_id, 'http://uchebniki.net/',str(predmeti[predmet]), str(classy), sep = '')
+                                    
